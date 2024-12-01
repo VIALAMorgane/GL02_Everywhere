@@ -1,0 +1,19 @@
+// Course class
+class Course {
+    constructor(name) {
+        this.name = name; // e.g., 'Math 101'
+        this.rooms = []; // List of rooms where the course is held
+    }
+
+    // SPEC_1: Associate a room with this course
+    addRoom(room) {
+        if (!this.rooms.includes(room)) {
+            this.rooms.push(room);
+        }
+    }
+
+    // Get all rooms information associated with the course
+    getRoomsInfo() {
+        return this.rooms.map(room => room.getRoomInfo());
+    }
+}

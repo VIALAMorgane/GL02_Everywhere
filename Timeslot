@@ -1,0 +1,40 @@
+// Timeslot class
+class Timeslot {
+    constructor(date, startTime, endTime) {
+        if (!this.isValidDate(date)) {
+            throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+        }
+        if (!this.isValidTime(startTime) || !this.isValidTime(endTime)) {
+            throw new Error('Invalid time format. Expected format: HH:MM');
+        }
+        if (startTime >= endTime) {
+            throw new Error('Start time must be before end time');
+        }
+        if (new Date(date) < new Date()) {
+            throw new Error('Date must not be in the past');
+        }
+        
+        this.date = date; // e.g., '2023-11-25'
+        this.startTime = startTime; // e.g., '10:00'
+        this.endTime = endTime; // e.g., '12:00'
+    }
+
+    // Validate date format
+    isValidDate(date) {
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        return dateRegex.test(date);
+    }
+
+    // Validate time format
+    isValidTime(time) {
+        const timeRegex = /^\d{2}:\d{2}$/;
+        return timeRegex.test(time);
+    }
+
+    // Check if timeslot overlaps with another timeslot
+    overlapsWith(otherTimeslot) {
+        return this.date === otherTimeslot.date &&
+               (this.startTime < otherTimeslot.endTime && this.endTime > otherTimeslot.startTime) ||
+               (this.startTime === otherTimeslot.endTime || this.endTime === otherTimeslot.startTime);
+    }
+}

@@ -1,0 +1,31 @@
+// Booking class
+class Booking {
+    constructor(course, timeslot, room) {
+        this.course = course; // Course instance
+        this.timeslot = timeslot; // Timeslot instance
+        this.room = room; // Room instance
+    }
+
+    // SPEC_5: Generate iCalendar file for this booking
+    generateICalendar() {
+        const uniqueId = `UID:${this.course.name}-${this.room.nom_salle}-${this.timeslot.date}-${this.timeslot.startTime}`;
+        const timestamp = `DTSTAMP:${this.timeslot.date.replace(/-/g, '')}T${this.timeslot.startTime.replace(':', '')}00`;
+        const dateStart = `DTSTART:${this.timeslot.date.replace(/-/g, '')}T${this.timeslot.startTime.replace(':', '')}00`;
+        const dateEnd = `DTEND:${this.timeslot.date.replace(/-/g, '')}T${this.timeslot.endTime.replace(':', '')}00`;
+        const summary = `SUMMARY:${this.course.name}`;
+        const location = `LOCATION:${this.room.nom_salle}`;
+        const description = `DESCRIPTION:Détails supplémentaires pour le cours ${this.course.name} dans la salle ${this.room.nom_salle}, bâtiment ${this.room.batiment}`;
+
+        return [
+            "BEGIN:VEVENT",
+            uniqueId,
+            timestamp,
+            dateStart,
+            dateEnd,
+            summary,
+            location,
+            description,
+            "END:VEVENT"
+        ].join('\n');
+    }
+}

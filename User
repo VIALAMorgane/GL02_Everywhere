@@ -1,0 +1,27 @@
+// User class
+class User {
+    constructor(username) {
+        this.username = username; // e.g., 'student123'
+        this.bookings = []; // List of Booking instances made by the user
+    }
+
+    // Make a booking for a course, timeslot, and room
+    makeBooking(course, timeslot, room) {
+        const booking = new Booking(course, timeslot, room);
+        if (room.addBooking(booking)) {
+            this.bookings.push(booking);
+            console.log(`Booking made successfully by ${this.username}`);
+        } else {
+            console.log(`Booking failed for ${this.username}. Room not available.`);
+        }
+    }
+
+    // Get all bookings made by the user
+    getBookings() {
+        return this.bookings.map(booking => ({
+            course: booking.course.name,
+            room: booking.room.nom_salle,
+            timeslot: booking.timeslot
+        }));
+    }
+}

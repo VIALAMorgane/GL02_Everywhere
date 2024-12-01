@@ -1,0 +1,91 @@
+// Room class
+class Room {
+    constructor(nom_salle, capacite, batiment) {
+        this.nom_salle = nom_salle; // e.g., 'Room A'
+        this.capacite = capacite; // e.g., 30
+        this.batiment = batiment; // e.g., 'Building 1'
+        this.bookings = []; // List of Booking instances
+        this.disponibilite = []; // List of available time slots
+    }
+
+    // SPEC_1: Get room information including capacity
+    getRoomInfo() {
+        return {
+            nom_salle: this.nom_salle,
+            capacite: this.capacite,
+            batiment: this.batiment,
+            disponibilite: this.disponibilite,
+            bookings: this.bookings.map(booking => ({
+                course: booking.course.name,
+                timeslot: booking.timeslot
+            }))
+        };
+    }
+
+    // SPEC_2: Get hosting capacity of the room
+    getCapacity() {
+        return this.capacite;
+    }
+
+    // SPEC_3: Check room availability for a given timeslot
+    isAvailable(timeslot) {
+        for (let booking of this.bookings) {
+            if (booking.timeslot.overlapsWith(timeslot)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // SPEC_4: Add a booking to the room if available
+    addBooking(booking) {
+        if (this.isAvailable(booking.timeslot)) {
+            this.bookings.push(booking);
+            return true;
+        } else {
+            console.warn(`Room ${this.nom_salle} is not available for the given timeslot: ${booking.timeslot.startTime} - ${booking.timeslot.endTime}`);
+        }
+        return false;
+    }
+
+    // SPEC_6: Get room occupation rate
+    getOccupationRate() {
+        // For simplicity, let's assume we calculate the occupation rate by counting bookings
+        const totalSlots = this.disponibilite.length > 0 ? this.disponibilite.length : 10; // Derive total slots dynamically or use default
+        return ((this.bookings.length / totalSlots) * 100).toFixed(2) + '%';
+    }
+
+    // SPEC_7: Sort rooms by hosting capacity
+    static sortRoomsByCapacity(rooms, ascending = false) {
+        return rooms.sort((a, b) => ascending ? a.capacite - b.capacite : b.capacite - a.capacite);
+    }
+
+    // Add available time slots to the room
+    ajouterDisponibilite(plage_horaire) {
+        this.disponibilite.push(plage_horaire);
+    }
+
+    // Generate occupancy report for the room
+    generateOccupancyReport() {
+        const taux_occupation = this.getOccupationRate();
+        const plages_horaires = this.bookings.map(booking => `${booking.timeslot.startTime} - ${booking.timeslot.endTime}`);
+        return {
+            nom_salle: this.nom_salle,
+            taux_occupation: taux_occupation,
+            plage_horaire: plages_horaires
+        };
+    }
+
+    // Generate room management data as per the provided format
+    generateRoomManagementData() {
+        const disponibiliteData = this.disponibilite.map(ph => `${ph}`).join('\n');
+        return [
+            `donnees_salle = ${this.nom_salle}\n${this.capacite}\n${this.batiment}\n${disponibiliteData}`
+        ].join('\n');
+    }
+
+    // SPEC_4: Get available rooms for a given timeslot
+    static getAvailableRooms(rooms, timeslot) {
+        return rooms.filter(room => room.isAvailable(timeslot));
+    }
+}
