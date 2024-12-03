@@ -5,6 +5,38 @@ class Service{
     
   }
 
+  check(file){
+
+  }
+
+  rechercheSalle(file, cours){
+
+  }
+
+  capaciteSalle(file, room){
+
+  }
+
+  disponibiliteSalle(file, room){
+
+  }
+
+  sallesDisponibles(file, slot){
+
+  }
+
+  genererICalendar(file, dateDebut, dateFin, cours){
+
+  }
+
+  tauxOccupation(file){
+
+  }
+
+  classementSalles(file, ordre){
+
+  }
+
   searchRoomByCourse(data, courseName) {
     var filtered = data.filter((p) => p.course.match(courseName, "i"));
     if (filtered.length === 0) {
